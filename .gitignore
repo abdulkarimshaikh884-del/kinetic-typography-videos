@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+nsslibs/
+
+# Remotion / build artifacts
+.remotion/
+
+# OS / editor
+.DS_Store
+*.log
+
+# Keep the rendered sample video tracked so it can be downloaded,
+# but ignore extra renders
+out/*
+!out/video.mp4
