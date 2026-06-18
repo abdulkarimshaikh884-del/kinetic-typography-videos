@@ -6,61 +6,84 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
-import { AnimatedWords } from "../components/AnimatedWords";
-import { Background } from "../components/Background";
+import { AnimatedText } from "../components/AnimatedText";
+import { MeshBackground } from "../components/MeshBackground";
+import { Icon } from "../components/Icon";
+import { hexToRgba } from "../theme";
 
 export const OutroScene: React.FC<{
   lines: string[];
   highlight: string[];
   accent: string;
-}> = ({ lines, highlight, accent }) => {
+  seedKey: string;
+}> = ({ lines, highlight, accent, seedKey }) => {
   const frame = useCurrentFrame();
-  const { fps, durationInFrames } = useVideoConfig();
+  const { fps } = useVideoConfig();
 
-  // Pulsing subscribe button near the end
   const btnEnter = spring({
-    frame: frame - 70,
+    frame: frame - 60,
     fps,
-    config: { damping: 10, stiffness: 130 },
+    config: { damping: 11, stiffness: 140 },
   });
-  const pulse = 1 + 0.05 * Math.sin((frame / fps) * 6);
+  const pulse = 1 + 0.045 * Math.sin((frame / fps) * 7);
   const btnScale = interpolate(btnEnter, [0, 1], [0, 1]) * pulse;
-  const btnOpacity = interpolate(btnEnter, [0, 1], [0, 1]);
+  const btnOp = interpolate(btnEnter, [0, 1], [0, 1]);
+
+  // bell rings (rotates) periodically after appearing
+  const ringT = (frame - 70) / fps;
+  const bellRot =
+    ringT > 0 ? Math.sin(ringT * 18) * Math.max(0, 14 - ringT * 6) : 0;
 
   return (
     <AbsoluteFill>
-      <Background accent={accent} />
+      <MeshBackground accent={accent} seedKey={seedKey} />
       <AbsoluteFill
         style={{
           justifyContent: "center",
           alignItems: "center",
           padding: 90,
-          gap: 60,
+          gap: 80,
         }}
       >
-        <AnimatedWords
+        <AnimatedText
           lines={lines}
           highlight={highlight}
           accent={accent}
-          fontSize={100}
-          staggerPerWord={4}
+          fontSize={96}
+          staggerPerChar={1}
         />
 
         <div
           style={{
             transform: `scale(${btnScale})`,
-            opacity: btnOpacity,
-            background: accent,
-            color: "#0a0a0f",
-            fontSize: 64,
+            opacity: btnOp,
+            display: "flex",
+            alignItems: "center",
+            gap: 26,
+            background: `linear-gradient(135deg, ${accent}, ${hexToRgba(
+              accent,
+              0.75
+            )})`,
+            color: "#05060a",
+            fontSize: 62,
             fontWeight: 900,
-            padding: "30px 70px",
+            padding: "30px 64px",
             borderRadius: 99,
-            boxShadow: `0 0 50px ${accent}`,
+            boxShadow: `0 0 60px ${hexToRgba(accent, 0.9)}`,
             letterSpacing: 1,
           }}
         >
-          ► SUBSCRIBE
+          <Icon name="play" size={54} color="#05060a" />
+          SUBSCRIBE
+          <span
+            style={{
+              display: "inline-flex",
+              transform: `rotate(${bellRot}deg)`,
+              transformOrigin: "top center",
+            }}
+          >
+            <Icon name="bell" size={54} color="#05060a" stroke={2.2} />
+          </span>
         </div>
       </AbsoluteFill>
     </AbsoluteFill>

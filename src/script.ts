@@ -1,17 +1,17 @@
 // ============================================================
-//  TECH VAULT - "5 Secret FREE AI Tools" Kinetic Typography
-//  Edit text, colors, and timing here. fps = 30
+//  TECH VAULT - "5 Secret FREE AI Tools"
+//  EDIT EVERYTHING HERE: text, colors, icons, timing. fps = 30
 // ============================================================
+import { COLORS, FPS, WIDTH, HEIGHT, TRANSITION_FRAMES } from "./theme";
 
-export const FPS = 30;
-export const WIDTH = 1080;
-export const HEIGHT = 1920; // vertical (YouTube Shorts / Reels). Use 1920x1080 for landscape.
+export { FPS, WIDTH, HEIGHT, TRANSITION_FRAMES };
 
 export type Scene =
   | {
       kind: "hook";
-      lines: string[]; // each line animates word-by-word
-      highlight: string[]; // words (lowercased) to highlight in accent color
+      kicker?: string; // small label above
+      lines: string[];
+      highlight: string[];
       accent: string;
       durationInFrames: number;
     }
@@ -19,6 +19,7 @@ export type Scene =
       kind: "tool";
       number: number;
       name: string;
+      icon: string; // key from Icon.tsx
       tagline: string[];
       highlight: string[];
       accent: string;
@@ -32,120 +33,87 @@ export type Scene =
       durationInFrames: number;
     };
 
-// Accent palette (neon / tech feel)
-const NEON_PINK = "#ff2e63";
-const NEON_CYAN = "#08d9d6";
-const NEON_GREEN = "#39ff14";
-const NEON_PURPLE = "#a855f7";
-const NEON_ORANGE = "#ff8c00";
-const NEON_YELLOW = "#ffe600";
-const NEON_BLUE = "#3b82f6";
-
 export const SCENES: Scene[] = [
   {
     kind: "hook",
+    kicker: "RUKO ZARA",
     lines: [
       "Agar aap abhi bhi EXPENSIVE",
-      "AI tools par apne paise",
+      "AI tools par paise",
       "BARBAAD kar rahe ho...",
-      "toh RUK JAO!",
     ],
-    highlight: ["expensive", "barbaad", "ruk", "jao!"],
-    accent: NEON_PINK,
-    durationInFrames: 150, // 5s
+    highlight: ["expensive", "barbaad"],
+    accent: COLORS.pink,
+    durationInFrames: 150,
   },
   {
     kind: "hook",
+    kicker: "YE DEKHO",
     lines: ["Ye 5 SECRET", "FREE tools aapki", "LIFE badal denge."],
     highlight: ["5", "secret", "free", "life"],
-    accent: NEON_GREEN,
-    durationInFrames: 120, // 4s
+    accent: COLORS.green,
+    durationInFrames: 120,
   },
   {
     kind: "tool",
     number: 1,
     name: "ytZolo.com",
-    tagline: [
-      "High-CTR thumbnails,",
-      "viral titles aur",
-      "optimized scripts —",
-      "wo bhi SECONDS mein!",
-    ],
-    highlight: ["high-ctr", "viral", "optimized", "seconds"],
-    accent: NEON_CYAN,
-    durationInFrames: 165, // 5.5s
+    icon: "rocket",
+    tagline: ["High-CTR thumbnails,", "viral titles aur", "scripts SECONDS mein!"],
+    highlight: ["high-ctr", "viral", "seconds"],
+    accent: COLORS.cyan,
+    durationInFrames: 165,
   },
   {
     kind: "tool",
     number: 2,
     name: "Ideogram AI",
-    tagline: [
-      "Thumbnails mein",
-      "FLAWLESS text aur",
-      "modern graphics —",
-      "best FREE text-to-image.",
-    ],
-    highlight: ["flawless", "free", "text-to-image."],
-    accent: NEON_PURPLE,
+    icon: "image",
+    tagline: ["Thumbnails mein", "FLAWLESS text aur", "modern graphics, FREE."],
+    highlight: ["flawless", "free."],
+    accent: COLORS.purple,
     durationInFrames: 165,
   },
   {
     kind: "tool",
     number: 3,
     name: "Luma Dream Machine",
-    tagline: [
-      "Ultra-realistic",
-      "AI B-rolls generate karo —",
-      "bina COPYRIGHT",
-      "strike ke dar ke.",
-    ],
+    icon: "video",
+    tagline: ["Ultra-realistic", "AI B-rolls banao,", "bina COPYRIGHT dar ke."],
     highlight: ["ultra-realistic", "copyright"],
-    accent: NEON_ORANGE,
+    accent: COLORS.orange,
     durationInFrames: 165,
   },
   {
     kind: "tool",
     number: 4,
     name: "Adobe Podcast AI",
-    tagline: [
-      "Noisy phone audio ko",
-      "ek CLICK mein",
-      "$1000 studio mic jaisa",
-      "CRISP aur clear banao.",
-    ],
-    highlight: ["click", "$1000", "crisp"],
-    accent: NEON_YELLOW,
+    icon: "audio",
+    tagline: ["Noisy audio ko ek", "CLICK mein $1000", "studio mic jaisa CRISP."],
+    highlight: ["click", "$1000", "crisp."],
+    accent: COLORS.yellow,
     durationInFrames: 165,
   },
   {
     kind: "tool",
     number: 5,
     name: "CapCut Desktop AI",
-    tagline: [
-      "Object tracking aur",
-      "automated KINETIC captions —",
-      "normal video ko",
-      "PRO level bana do.",
-    ],
+    icon: "scissors",
+    tagline: ["Auto KINETIC captions", "aur object tracking,", "video PRO bana do."],
     highlight: ["kinetic", "pro"],
-    accent: NEON_BLUE,
+    accent: COLORS.blue,
     durationInFrames: 165,
   },
   {
     kind: "outro",
-    lines: [
-      "Daily hidden tech",
-      "updates ke liye",
-      "TECH VAULT ko abhi",
-      "SUBSCRIBE & FOLLOW karo!",
-    ],
-    highlight: ["tech", "vault", "subscribe", "follow"],
-    accent: NEON_PINK,
-    durationInFrames: 150,
+    lines: ["Daily hidden tech", "ke liye TECH VAULT", "ko SUBSCRIBE karo!"],
+    highlight: ["tech", "vault", "subscribe"],
+    accent: COLORS.pink,
+    durationInFrames: 165,
   },
 ];
 
-export const TOTAL_DURATION = SCENES.reduce(
-  (sum, s) => sum + s.durationInFrames,
-  0
-);
+// Total accounts for the overlap created by transitions between scenes.
+export const TOTAL_DURATION =
+  SCENES.reduce((sum, s) => sum + s.durationInFrames, 0) -
+  (SCENES.length - 1) * TRANSITION_FRAMES;

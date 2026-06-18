@@ -4,13 +4,15 @@
   "description": "Kinetic typography video for Tech Vault YouTube channel - 5 Free AI Tools",
   "scripts": {
     "dev": "remotion studio",
-    "render": "remotion render KineticTypography out/video.mp4",
-    "render-hd": "remotion render KineticTypography out/video.mp4 --codec=h264 --crf=18",
+    "genaudio": "node scripts/genaudio.mjs",
+    "render": "remotion render KineticTypography out/video.mp4 --codec=h264 --crf=18",
     "upgrade": "remotion upgrade"
   },
   "dependencies": {
     "@remotion/cli": "4.0.346",
     "@remotion/google-fonts": "4.0.346",
+    "@remotion/shapes": "^4.0.346",
+    "@remotion/transitions": "^4.0.346",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "remotion": "4.0.346"
