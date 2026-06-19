@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "remotion studio",
     "genaudio": "node scripts/genaudio.mjs",
+    "genaudio:brand": "node scripts/genaudio-brand.mjs",
     "render": "remotion render KineticTypography out/video.mp4 --codec=h264 --crf=18",
+    "render:brand": "remotion render BrandReel out/brand-reel.mp4 --codec=h264 --crf=18",
     "upgrade": "remotion upgrade"
   },
   "dependencies": {
